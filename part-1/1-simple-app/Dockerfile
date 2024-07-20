@@ -1,14 +1,15 @@
-FROM node:20
-
+FROM node:20-alpine AS base
 WORKDIR /usr/src/app
-
-COPY . .
-
+COPY package* .
 RUN npm install
 
-EXPOSE 3000
+FROM base AS development
+COPY . .
+EXPOSE 3001
+CMD ["npm", "run", "dev"]
 
-CMD ["node", "index.js"]
-
-
+FROM base AS production
+COPY . .
+EXPOSE 3001
+CMD ["npm", "run", "start"]
 

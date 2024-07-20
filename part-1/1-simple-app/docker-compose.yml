@@ -1,0 +1,15 @@
+services:
+  mongo-container:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - simple-app-vol:/data/db
+
+  simple-app-test:
+    build: ./
+    ports:
+      - "3001:3001"
+
+volumes:
+  simple-app-vol:

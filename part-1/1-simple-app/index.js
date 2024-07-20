@@ -1,18 +1,40 @@
+const express = require("express");
+const mongoose = require("mongoose");
+const app = express();
+const port = 3001;
 
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  age: { type: Number, required: true },
+});
 
-const express = require('express')
-const app = express()
-const port = 3000
+const User = mongoose.model("User", userSchema);
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html')
-})
+// Connect to MongoDB
+mongoose
+  .connect("mongodb://mongo-container:27017/test", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((err) => {
+    console.error("Failed to connect to MongoDB", err);
+  });
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
+app.get("/", async (req, res) => {
+  const user = new User({
+    name: "huzaifa new",
+    email: "huzaifa2@gmail.com",
+    age: 25,
+  });
+  const data = await user.save();
+  console.log({ data });
+  res.send("Hello World!!!");
+});
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  console.log(`Example app listening on port ${port}`);
+});
